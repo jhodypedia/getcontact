@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencarian Nomor</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+  <style>
+    .container {
+      margin-top: 50px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1><i class="fas fa-search"></i> Pencarian Nomor Telepon</h1>
+    <input type="text" id="phoneNumber" class="form-control" placeholder="Masukkan nomor telepon" />
+    <button id="searchBtn" class="btn btn-primary mt-3"><i class="fas fa-search"></i> Cari</button>
+    <h3 class="mt-4">Hasil:</h3>
+    <pre id="result"></pre>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+  <script>
+    $('#searchBtn').click(function () {
+      const phoneNumber = $('#phoneNumber').val();
+      
+      if (!phoneNumber) {
+        toastr.error('Mohon masukkan nomor telepon!');
+        return;
+      }
+
+      $.post('http://localhost:3000/search', { phoneNumber: phoneNumber }, function (data) {
+        $('#result').text(JSON.stringify(data, null, 2));
+        toastr.success('Pencarian selesai!');
+      }).fail(function (error) {
+        toastr.error('Terjadi kesalahan: ' + error.responseJSON.error);
+      });
+    });
+  </script>
+
+</body>
+</html>
